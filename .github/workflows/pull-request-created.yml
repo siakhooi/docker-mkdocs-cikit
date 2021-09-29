@@ -2,8 +2,8 @@ name: Test on Pull Request Created
 
 env:
   DOCKERFILE1: Dockerfile
-  TAG1: tagname1:latest
-  FILE1: tagname1.tar.gz
+  TAG1: mkdocs-cikit:latest
+  FILE1: mkdocs-cikit.tar.gz
 
 on:
   pull_request:

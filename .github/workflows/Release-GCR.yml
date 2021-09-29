@@ -5,9 +5,9 @@ env:
   REGISTRY: docker.pkg.github.com
   REGISTRY_USER: siakhooi
   REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD_GCR }}
-  TAG1: siakhooi/template-docker/template-docker:latest
-  TAG2: siakhooi/template-docker/template-docker:${{ github.event.release.tag_name }}
-  FILE1: template-docker.tar.gz
+  TAG1: siakhooi/docker-mkdocs-cikit/mkdocs-cikit:latest
+  TAG2: siakhooi/docker-mkdocs-cikit/mkdocs-cikit:${{ github.event.release.tag_name }}
+  FILE1: mkdocs-cikit.tar.gz
 
 on:
   release:
