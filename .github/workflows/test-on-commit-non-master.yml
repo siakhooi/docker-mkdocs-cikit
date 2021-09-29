@@ -1,0 +1,28 @@
+name: Test on non master commit
+
+env:
+  DOCKERFILE1: Dockerfile
+  TAG1: tagname1:latest
+  FILE1: tagname1.tar.gz
+
+on:
+  push:
+    branches:
+      - "*"
+      - "!master"
+
+jobs:
+  test_docker_build:
+    name: Test Docker Build
+    runs-on: ubuntu-latest
+    container:
+      image: docker:dind
+    steps:
+      - uses: actions/checkout@v2
+      - run: docker build -f $DOCKERFILE1 -t $TAG1 .
+      - run: docker images
+      - run: docker save $TAG1 | gzip > $FILE1
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.FILE1 }}
+          path: ${{ env.FILE1 }}

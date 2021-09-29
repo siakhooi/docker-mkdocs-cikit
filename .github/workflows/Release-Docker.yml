@@ -1,0 +1,33 @@
+name: Push release to Docker Hub
+
+env:
+  DOCKERFILE1: Dockerfile
+  REGISTRY: registry.hub.docker.com
+  REGISTRY_USER: siakhooi
+  REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD_DOCKER_HUB }}
+  TAG1: siakhooi/template-docker:latest
+  TAG2: siakhooi/template-docker:${{ github.event.release.tag_name }}
+  FILE1: template-docker.tar.gz
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  push_to_registry:
+    name: Push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    container:
+      image: docker:dind
+    steps:
+      - uses: actions/checkout@v2
+      - run: docker login -u $REGISTRY_USER -p "$REGISTRY_PASSWORD" $REGISTRY
+      - run: docker build -f $DOCKERFILE1 -t $REGISTRY/$TAG1 -t $REGISTRY/$TAG2  .
+      - run: docker images
+      - run: docker push $REGISTRY/$TAG1
+      - run: docker push $REGISTRY/$TAG2
+      - run: docker save $REGISTRY/$TAG1 | gzip > $FILE1
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.FILE1 }}
+          path: ${{ env.FILE1 }}
